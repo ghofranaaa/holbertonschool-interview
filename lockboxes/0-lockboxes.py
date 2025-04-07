@@ -18,7 +18,9 @@ def canUnlockAll(boxes):
         if current not in visited:
             visited.add(current)
             for key in boxes[current]:
-                if isinstance(key, int) and 0 <= key < num_boxes and key not in visited:
+                if isinstance(key, int)
+                and 0 <= key < num_boxes
+                and key not in visited:
                     to_visit.append(key)
 
     return len(visited) == num_boxes
