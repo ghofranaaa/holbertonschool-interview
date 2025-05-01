@@ -27,9 +27,10 @@ def main():
 
             try:
                 parts = line.strip().split()
-                status_code = int(parts[-2])
-                file_size += int(parts[-1])
+                size = int(parts[-1])
+                file_size += size
 
+                status_code = int(parts[-2])
                 if status_code in status_codes:
                     status_codes[status_code] += 1
             except (IndexError, ValueError):
