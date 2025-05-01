@@ -7,10 +7,10 @@ This module validates if the given data is UTF-8
 def validUTF8(data):
     """
     Determines if a given data set represents a valid UTF-8 encoding.
-    
+
     Parameters:
     - data: List of integers where each integer represents 1 byte.
-    
+
     Returns:
     - True if the data is a valid UTF-8 encoding, otherwise False.
     """
