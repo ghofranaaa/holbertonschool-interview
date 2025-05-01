@@ -1,8 +1,10 @@
 #!/usr/bin/python3
-import sys
 """
 This module prints the stats and parses log lines
 """
+
+
+import sys
 
 
 def print_stats(file_size, status_codes):
