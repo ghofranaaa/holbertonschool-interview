@@ -28,14 +28,12 @@ def main():
             try:
                 parts = line.strip().split()
                 status_code = int(parts[-2])
-                size = int(parts[-1])
+                file_size += int(parts[-1])
 
                 if status_code in status_codes:
                     status_codes[status_code] += 1
-                file_size += size
-
-            except (ValueError, IndexError):
-                continue  # Skip malformed lines
+            except (IndexError, ValueError):
+                continue
 
             if line_count % 10 == 0:
                 print_stats(file_size, status_codes)
@@ -44,8 +42,8 @@ def main():
         print_stats(file_size, status_codes)
         raise
 
-    # ✅ Ensure stats are printed after the last line
-    if line_count % 10 != 0:
+    # ✅ At the very end, print remaining stats if not already printed
+    if line_count % 10 != 0 or line_count == 0:
         print_stats(file_size, status_codes)
 
 
