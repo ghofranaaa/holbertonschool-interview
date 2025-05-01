@@ -22,17 +22,23 @@ heap_t *heap_insert(heap_t **root, int value)
 		return (*root);
 	}
 
+	/* Find the parent node where the new node should be inserted */
 	insert_parent = get_insert_parent(*root);
-	new_node = binary_tree_node(insert_parent, value);
+	if (!insert_parent)
+		return (NULL);
 
+	/* Create the new node */
+	new_node = binary_tree_node(insert_parent, value);
 	if (!new_node)
 		return (NULL);
 
+	/* Insert the new node as a left or right child */
 	if (!insert_parent->left)
 		insert_parent->left = new_node;
 	else
 		insert_parent->right = new_node;
 
+	/* Heapify up to ensure the heap property is maintained */
 	heapify_up(new_node);
 
 	return (new_node);
@@ -53,16 +59,21 @@ heap_t *get_insert_parent(heap_t *root)
 	if (!root)
 		return (NULL);
 
+	/* Perform a level-order traversal to find the first available parent node */
 	queue[rear++] = root;
 
 	while (front < rear)
 	{
 		parent = queue[front++];
 
-		if (parent->left && parent->right)
-			continue;
+		if (!parent->left || !parent->right)
+			return (parent);
 
-		return (parent);
+		/* Add children to the queue */
+		if (parent->left)
+			queue[rear++] = parent->left;
+		if (parent->right)
+			queue[rear++] = parent->right;
 	}
 
 	return (NULL);
@@ -77,12 +88,14 @@ void heapify_up(heap_t *node)
 {
 	int temp;
 
+	/* Move the node up until the max-heap property is restored */
 	while (node && node->parent && node->parent->n < node->n)
 	{
 		temp = node->n;
 		node->n = node->parent->n;
 		node->parent->n = temp;
 
+		/* Move the node to its parent for the next iteration */
 		node = node->parent;
 	}
 }
