@@ -6,7 +6,8 @@ Determines the winner of the Prime Game
 
 
 def sieve(n):
-    """Returns a list of prime counts up to n using the Sieve of Eratosthenes"""
+    """Returns a list of prime counts up to n using the
+    Sieve of Eratosthenes"""
     is_prime = [False, False] + [True] * (n - 1)
     for i in range(2, int(n ** 0.5) + 1):
         if is_prime[i]:
@@ -19,6 +20,7 @@ def sieve(n):
             count += 1
         prime_counts[i] = count
     return prime_counts
+
 
 def isWinner(x, nums):
     """
