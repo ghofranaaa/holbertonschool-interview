@@ -4,10 +4,11 @@ This module provides a function to compute the minimum number of coins
 required to meet a given total amount.
 """
 
+
 def makeChange(coins, total):
     """
     Determines the fewest number of coins needed to make up a given total.
-    
+
     Args:
         coins (list): List of coin denominations (integers > 0).
         total (int): The amount to reach.
@@ -18,7 +19,6 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    # Initialize DP array with a large number (greater than any possible answer)
     dp = [float('inf')] * (total + 1)
     dp[0] = 0  # 0 coins to make total 0
 
