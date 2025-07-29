@@ -8,7 +8,7 @@
 */
 void merge_line_left(int *line, size_t size)
 {
-	size_t i, j;
+	size_t i;
 	int last = 0;
 
 	/* First pass: move non-zero elements to the left */
@@ -51,7 +51,7 @@ void merge_line_left(int *line, size_t size)
 */
 void merge_line_right(int *line, size_t size)
 {
-	ssize_t i, j;
+	ssize_t i;
 	ssize_t last = size - 1;
 
 	/* First pass: move non-zero elements to the right */
