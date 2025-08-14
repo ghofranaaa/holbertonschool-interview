@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """This module counts occurrences of keywords in hot post titles of a
 subreddit using the Reddit API."""
-
 import requests
 import re
 
