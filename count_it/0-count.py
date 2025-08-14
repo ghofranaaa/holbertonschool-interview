@@ -14,7 +14,8 @@ def count_words(subreddit, word_list, after=None, counts=None):
         subreddit (str): Name of the subreddit to query.
         word_list (list): List of keywords to count.
         after (str, optional): Token for pagination. Defaults to None.
-        counts (dict, optional): Dictionary storing keyword counts. Defaults to None.
+        counts (dict, optional): Dictionary storing keyword counts.
+        Defaults to None.
 
     Prints:
         Sorted keyword counts in descending order of frequency.
@@ -35,13 +36,14 @@ def count_words(subreddit, word_list, after=None, counts=None):
 
     data = response.json().get('data', {})
     posts = data.get('children', [])
-    
+
     for post in posts:
         title = post['data']['title'].lower()
         for word in word_list:
             word_lower = word.lower()
             # Count exact matches using regex
-            matches = re.findall(r'\b{}\b'.format(re.escape(word_lower)), title)
+            matches = re.findall(r'\b{}\b'.format(re.escape(word_lower)),
+                                 title)
             counts[word_lower] = counts.get(word_lower, 0) + len(matches)
 
     after = data.get('after')
