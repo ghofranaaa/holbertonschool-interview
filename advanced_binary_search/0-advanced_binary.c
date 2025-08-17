@@ -51,7 +51,7 @@ int advanced_binary_recursive(int *array, size_t left, size_t right,
 	if (array[mid] == value)
 	{
 		/* Check if this is the first occurrence */
-		if (mid == left || array[mid - 1] != value)
+		if (mid == 0 || array[mid - 1] != value)
 			return (mid);
 		/* Search in the left half to find first occurrence */
 		return (advanced_binary_recursive(array, left, mid - 1, value));
