@@ -43,7 +43,7 @@ void heapify_down(heap_t *root)
 heap_t *get_last_node(heap_t *root)
 {
 	heap_t **queue = NULL;
-	int front = 0, rear = 0, size = 0;
+	int front = 0, rear = 0;
 
 	heap_t *node;
 
@@ -51,7 +51,6 @@ heap_t *get_last_node(heap_t *root)
 		return (NULL);
 
 	/* Count total nodes to allocate queue */
-	size = 0;
 	queue = malloc(1024 * sizeof(heap_t *));
 	if (!queue)
 		return (NULL);
