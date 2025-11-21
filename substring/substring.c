@@ -9,7 +9,7 @@ int compare_counts(int *a, int *b, int size)
     for (int i = 0; i < size; i++)
         if (a[i] != b[i])
             return 0;
-    return 1;
+    return (1);
 }
 
 /* Main function */
@@ -18,7 +18,7 @@ int *find_substring(char const *s, char const **words, int nb_words, int *n)
     if (!s || !words || nb_words == 0)
     {
         *n = 0;
-        return NULL;
+        return (NULL);
     }
 
     int word_len = strlen(words[0]);
@@ -27,7 +27,7 @@ int *find_substring(char const *s, char const **words, int nb_words, int *n)
 
     int *res = malloc(sizeof(int) * s_len);
     if (!res)
-        return NULL;
+        return (NULL);
 
     int count = 0;
 
@@ -38,7 +38,7 @@ int *find_substring(char const *s, char const **words, int nb_words, int *n)
         if (!used)
         {
             free(res);
-            return NULL;
+            return (NULL);
         }
 
         for (int j = 0; j < nb_words; j++)
@@ -49,7 +49,7 @@ int *find_substring(char const *s, char const **words, int nb_words, int *n)
             {
                 free(used);
                 free(res);
-                return NULL;
+                return (NULL);
             }
 
             for (int k = 0; k < nb_words; k++)
@@ -80,10 +80,10 @@ int *find_substring(char const *s, char const **words, int nb_words, int *n)
     {
         free(res);
         *n = 0;
-        return NULL;
+        return (NULL);
     }
 
     *n = count;
-    return res;
+    return (res);
 }
 			
