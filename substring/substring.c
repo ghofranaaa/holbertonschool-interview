@@ -1,95 +1,139 @@
-#include <stdio.h>
+#include "substring.h"
 #include <stdlib.h>
 #include <string.h>
-#include "substring.h"
 
-/* Helper to compare two arrays of word counts */
-int compare_counts(int *a, int *b, int size)
+/**
+* build_word_map - builds list of unique words and their expected counts
+* @words: array of words
+* @nb_words: number of words
+* @unique: pointer to store unique words array
+* @expected: pointer to store expected frequency array
+*
+* Return: number of unique words, or -1 on failure
+*/
+static int build_word_map(char const **words, int nb_words,
+char ***unique, int **expected)
 {
-	int i;
+int i, j, unique_count = 0;
 
-	for (i = 0; i < size; i++)
-		if (a[i] != b[i])
-			return (0);
-	return (1);
+*unique = malloc(sizeof(char *) * nb_words);
+*expected = calloc(nb_words, sizeof(int));
+if (!*unique || !*expected)
+return (-1);
+for (i = 0; i < nb_words; i++)
+{
+int found = -1;
+for (j = 0; j < unique_count; j++)
+{
+if (strcmp(words[i], (*unique)[j]) == 0)
+{
+found = j;
+break;
 }
-
-/* Main function */
+}
+if (found == -1)
+{
+(*unique)[unique_count] = (char *)words[i];
+(*expected)[unique_count] = 1;
+unique_count++;
+}
+else
+{
+(*expected)[found]++;
+}
+}
+return (unique_count);
+}
+/**
+* is_valid_substring - checks if substring at index is valid concatenation
+* @s: the string
+* @start: starting index
+* @word_len: length of each word
+* @nb_words: number of words
+* @unique: array of unique words
+* @expected: expected word counts
+* @unique_count: number of unique words
+* @seen: helper array to track counts
+*
+* Return: 1 if valid, 0 otherwise
+*/
+static int is_valid_substring(char const *s, int start, int word_len,
+int nb_words, char **unique,
+int *expected, int unique_count, int *seen)
+{
+int i, j;
+for (i = 0; i < unique_count; i++)
+seen[i] = 0;
+for (i = 0; i < nb_words; i++)
+{
+const char *sub = s + start + i * word_len;
+int matched = 0;
+for (j = 0; j < unique_count; j++)
+{
+if (strncmp(sub, unique[j], word_len) == 0)
+{
+seen[j]++;
+if (seen[j] > expected[j])
+return (0);
+matched = 1;
+break;
+}
+}
+if (!matched)
+return (0);
+}
+return (1);
+}
+/**
+* find_substring - finds all starting indices where \
+concatenation of words appear
+* @s: the string to scan
+* @words: array of words
+* @nb_words: number of words
+* @n: pointer to number of results
+*
+* Return: allocated array of indices, or NULL if none
+*/
 int *find_substring(char const *s, char const **words, int nb_words, int *n)
 {
-	int word_len, sub_len, s_len, *res, count, i;
-
-	if (!s || !words || nb_words == 0)
-	{
-		*n = 0;
-		return (NULL);
-	}
-
-	word_len = strlen(words[0]);
-	sub_len = word_len * nb_words;
-	s_len = strlen(s);
-
-	res = malloc(sizeof(int) * s_len);
-	if (!res)
-		return (NULL);
-
-	count = 0;
-
-	for (i = 0; i <= s_len - sub_len; i++)
-	{
-		int found = 1, j;
-		int *used = calloc(nb_words, sizeof(int));
-
-		if (!used)
-		{
-			free(res);
-			return (NULL);
-		}
-
-		for (j = 0; j < nb_words; j++)
-		{
-			int matched = 0, k;
-			char *substr = strndup(s + i + j * word_len, word_len);
-
-			if (!substr)
-			{
-				free(used);
-				free(res);
-				return (NULL);
-			}
-
-			for (k = 0; k < nb_words; k++)
-			{
-				if (!used[k] && strcmp(substr, words[k]) == 0)
-				{
-					used[k] = 1;
-					matched = 1;
-					break;
-				}
-			}
-
-			free(substr);
-
-			if (!matched)
-			{
-				found = 0;
-				break;
-			}
-		}
-
-		free(used);
-
-		if (found)
-			res[count++] = i;
-	}
-
-	if (count == 0)
-	{
-		free(res);
-		*n = 0;
-		return (NULL);
-	}
-
-	*n = count;
-	return (res);
+int word_len, total_len, s_len, i, unique_count, *indices, *expected, *seen;
+char **unique;
+*n = 0;
+word_len = strlen(words[0]);
+s_len = strlen(s);
+total_len = word_len *nb_words;
+if (s_len < total_len || word_len == 0)
+return (NULL);
+indices = malloc(sizeof(int) * s_len);
+if (!indices)
+return (NULL);
+unique_count = build_word_map(words, nb_words, &unique, &expected);
+if (unique_count == -1)
+{
+free(indices);
+return (NULL);
+}
+seen = calloc(unique_count, sizeof(int));
+if (!seen)
+{
+free(indices);
+free(unique);
+free(expected);
+return (NULL);
+}
+for (i = 0; i <= s_len - total_len; i++)
+{
+if (is_valid_substring(s, i, word_len, nb_words,
+unique, expected, unique_count, seen))
+indices[(*n)++] = i;
+}
+free(unique);
+free(expected);
+free(seen);
+if (*n == 0)
+{
+free(indices);
+return (NULL);
+}
+return (indices);
 }
